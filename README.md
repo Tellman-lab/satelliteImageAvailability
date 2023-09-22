@@ -1,7 +1,10 @@
 # satelliteImageAvailability
 GitHub respository containing short code to create a graphic of available satellite images for a given region and time period.
+
 Social Pixel Lab
+
 Alex Saunders, Jonathan Giezendanner
+
 September 2023
 
 Instructions for use:
