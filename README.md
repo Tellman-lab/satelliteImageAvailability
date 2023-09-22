@@ -1,6 +1,12 @@
 # satelliteImageAvailability
 GitHub respository containing short code to create a graphic of available satellite images for a given region (ROI) and time period (TOI). Graphic includes estimates of % of ROI area covered, and % cloud cover in the ROI. 
 
+### WORKING! STILL NEED TO ADD:
+* __Check Planet API__
+* __Merge MODIS Aqua and Terra__
+* __Add VIIRS__
+
+
 **NOTE:** availability return for Planet data does not consistently work in current version. Users are encouraged to manually extract the Planet image dates, with ROI area and cloud cover estimates from Planet Explorer. An option is provided in the script to provide link to a csv file containing the manually extracted Planet information.
 
 Social Pixel Lab
