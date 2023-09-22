@@ -15,7 +15,8 @@ def GetDataFrames(startDate, endDate, geometry, planetAPIKey, planetCSV=None):
     landsat7 = ee.ImageCollection("LANDSAT/LE07/C02/T1")
     landsat8 = ee.ImageCollection("LANDSAT/LC08/C02/T1")
     landsat9 = ee.ImageCollection("LANDSAT/LC09/C02/T1")
-    sentinel2 = ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
+    # sentinel2 = ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
+    sentinel2 = ee.ImageCollection("COPERNICUS/S2_SR")
     sentinel1 = ee.ImageCollection("COPERNICUS/S1_GRD")
 
     sentinel2_collection = get_imagery_availability(sentinel2, 'S2', start_date, end_date, geometry, 'sentinel2', 20)
