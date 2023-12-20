@@ -6,7 +6,7 @@ import PlanetDataInfo
 import importlib
 importlib.reload(PlanetDataInfo)
 
-def GetDataFrames(startDate, endDate, geometry, planetAPIKey, planetCSV=None):
+def GetDataFrames(startDate, endDate, geometry, planetAPIKey, planetCSV=None, includeS2TOA=False):
     start_date = ee.Date(startDate)
     end_date = ee.Date(endDate)
 
@@ -17,9 +17,12 @@ def GetDataFrames(startDate, endDate, geometry, planetAPIKey, planetCSV=None):
     landsat9 = ee.ImageCollection("LANDSAT/LC09/C02/T1")
     # sentinel2 = ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
     sentinel2 = ee.ImageCollection("COPERNICUS/S2_SR")
+    sentinel2L1 = ee.ImageCollection("COPERNICUS/S2")
+    # sentinel2L1 = ee.ImageCollection("COPERNICUS/S2_HARMONIZED")
     sentinel1 = ee.ImageCollection("COPERNICUS/S1_GRD")
 
     sentinel2_collection = get_imagery_availability(sentinel2, 'S2', start_date, end_date, geometry, 'sentinel2', 20)
+    sentinel2L1_collection = get_imagery_availability(sentinel2L1, 'S2 TOA', start_date, end_date, geometry, 'sentinel2_TOA', 20)
     sentinel1_collection = get_imagery_availability(sentinel1, 'S1', start_date, end_date, geometry, None, None)
     # modis_aqua_collection = get_imagery_availability(modis_aqua, 'MODIS', start_date, end_date, geometry, 'modis', 1000)
     modis_terra_collection = get_imagery_availability(modis_terra, 'MODIS', start_date, end_date, geometry, 'modis', 1000)
@@ -32,6 +35,15 @@ def GetDataFrames(startDate, endDate, geometry, planetAPIKey, planetCSV=None):
     date_list_df['date'] = date_list_df['date'].dt.date
 
     sentinel2_df = create_imagery_info_df(sentinel2_collection)
+    # If no S2 surface reflectance data, use top of atmosphere S2 data (if available)
+    s2TOAFlag=False
+    if includeS2TOA==True and len(sentinel2_df)<1:
+        sentinel2_df = create_imagery_info_df(sentinel2L1_collection)
+        if len(sentinel2_df)>=1:
+            s2TOAFlag=True
+        else:
+            sentinel2_df = create_imagery_info_df(sentinel2_collection)
+            s2TOAFlag=False
     sentinel1_df = create_imagery_info_df(sentinel1_collection)
     # modis_aqua_df = create_imagery_info_df(modis_aqua_collection)
     modis_terra_df = create_imagery_info_df(modis_terra_collection)
@@ -49,7 +61,7 @@ def GetDataFrames(startDate, endDate, geometry, planetAPIKey, planetCSV=None):
         PlanetInfoDF = pd.read_csv(planetCSV)
         PlanetInfoDF = PlanetInfoDF.set_index('date')
         
-    return date_list_df, sentinel2_df, sentinel1_df, modis_terra_df, landsat7_df, landsat8_df, landsat9_df, PlanetInfoDF
+    return date_list_df, sentinel2_df, sentinel1_df, modis_terra_df, landsat7_df, landsat8_df, landsat9_df, PlanetInfoDF, s2TOAFlag
 
 
 

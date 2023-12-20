@@ -50,7 +50,7 @@ def showImageAvailability(startDate, endDate, geometry, planetAPIKey, planetCSV=
 
     # Create a second plot where the sat image availability is grouped by sat / sensor type
     # Define names for plotting
-    if includeS2TOA==True:
+    if s2TOAFlag==True:
         names = ['Sentinel-1', 'Sentinel-2 TOA', 'MODIS', 'Landsat', 'Planet']
     else:
         names = ['Sentinel-1', 'Sentinel-2', 'MODIS', 'Landsat', 'Planet']

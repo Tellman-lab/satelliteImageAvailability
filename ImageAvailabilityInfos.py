@@ -43,6 +43,7 @@ def GetDataFrames(startDate, endDate, geometry, planetAPIKey, planetCSV=None, in
             s2TOAFlag=True
         else:
             sentinel2_df = create_imagery_info_df(sentinel2_collection)
+            s2TOAFlag=False
     sentinel1_df = create_imagery_info_df(sentinel1_collection)
     # modis_aqua_df = create_imagery_info_df(modis_aqua_collection)
     modis_terra_df = create_imagery_info_df(modis_terra_collection)
