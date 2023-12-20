@@ -43,14 +43,17 @@ def visualize_imagery_info(collection_df, ax, j):
     return ax
 
 # Function to create the gra[hoc
-def showImageAvailability(startDate, endDate, geometry, planetAPIKey, planetCSV=None):
+def showImageAvailability(startDate, endDate, geometry, planetAPIKey, planetCSV=None, includeS2TOA=False):
     
     # Run GetDataFrames function to get dataframes for each sat-sensor
-    date_list_df, sentinel2_df, sentinel1_df, modis_terra_df, landsat7_df, landsat8_df, landsat9_df, PlanetInfoDF = info.GetDataFrames(startDate, endDate, geometry, planetAPIKey, planetCSV)
+    date_list_df, sentinel2_df, sentinel1_df, modis_terra_df, landsat7_df, landsat8_df, landsat9_df, PlanetInfoDF, s2TOAFlag = info.GetDataFrames(startDate, endDate, geometry, planetAPIKey, planetCSV, includeS2TOA)
 
     # Create a second plot where the sat image availability is grouped by sat / sensor type
     # Define names for plotting
-    names = ['Sentinel-1', 'Sentinel-2', 'MODIS', 'Landsat', 'Planet']
+    if includeS2TOA==True:
+        names = ['Sentinel-1', 'Sentinel-2 TOA', 'MODIS', 'Landsat', 'Planet']
+    else:
+        names = ['Sentinel-1', 'Sentinel-2', 'MODIS', 'Landsat', 'Planet']
     js = range(len(names), 0, -1)
 
     # Create the plot
@@ -98,7 +101,7 @@ def showImageAvailability(startDate, endDate, geometry, planetAPIKey, planetCSV=
     # Add a cbar legend for % cloudiness
     #cbar_ax = fig.add_axes([0.88, 0.94, 0.08, 0.04]) # currently need to be done manually
     # cbar_ax = fig.add_axes([0.52, 0.96, 0.05, 0.04]) # currently need to be done manually
-    cbar_ax = fig.add_axes([0.62, 0.84, 0.05, 0.04]) # currently need to be done manually
+    cbar_ax = fig.add_axes([0.62, 0.88, 0.05, 0.04]) # currently need to be done manually
     cbar = fig.colorbar(mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(vmin=0, vmax=100), cmap='gray'), orientation='horizontal', cax=cbar_ax)
     cbar.set_ticks([0,100])
     cbar.set_ticklabels([0,100])
